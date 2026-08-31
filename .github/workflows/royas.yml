@@ -1,43 +1,50 @@
 name: royas
+
 on:
   schedule:
-    - cron: '0 * * * *' # Runs in every hour
-  pull_request:
-      branches:
-        - main
-
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
-      - uses: actions/checkout@v4
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: config
+        run: |
+          git config --global user.email "bot@github.com"
+          git config --global user.name "roya bot"
+
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
-            python-version: '3.x' 
-            
+          python-version: '3.x'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          
-          pwd
-          cd ./platforms/
-          
-          pip3 install requests
-      - name: execute py script 
-        run:  |
-            pwd
-            cd ./platforms/
-            python3 royanews.py > links/royanews.m3u8
-            python3 royatv.py > links/royatv.m3u8
-            #python3 royasport.py > links/royasport.m3u8
-      - name: commit and push files
+
+      - name: Install requests module
+        run: python3 -m pip install requests
+
+      - name: Execute Python script for royatv
+        run: python3 platforms/royatv.py
+        
+      - name: Execute Python script for royasport
+        run: python3 platforms/royasport.py
+
+      - name: Execute Python script for royanews
+        run: python3 platforms/royanews.py      
+
+      - name: git add
         run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git pull origin main
           git add -A
-          git commit -m "updated streams $(date +'%Y-%m-%d %H:%M:%S')"
-          git push
+          ls -la 
+
+      - name: commit & push
+        run: |
+          git pull origin main
+          git commit -m "royas updated $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push origin main
