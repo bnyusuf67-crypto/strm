@@ -12,11 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: config
-        run: |
-          git config --global user.email "bot@github.com"
-          git config --global user.name "roya bot"
-
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -45,6 +40,8 @@ jobs:
 
       - name: commit & push
         run: |
-          git pull origin main
-          git commit -m "royas updated $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
-          git push origin main
+          git config --local user.email "bot@github.com"
+          git config --local user.name "royas bot"
+          git add .
+          git commit -m "royas updated $(date +'%Y-%m-%d %H:%M:%S')" || echo "No updated streams"
+          git push
