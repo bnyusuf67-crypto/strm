@@ -24,14 +24,8 @@ jobs:
       - name: Install requests module
         run: python3 -m pip install requests
 
-      - name: Execute Python script for royatv
-        run: python3 platforms/royatv.py > platforms/links/royatv.m3u8
-        
-      - name: Execute Python script for royasport
-        run: python3 platforms/royasport.py > platforms/links/royasport.m3u8
-
-      - name: Execute Python script for royanews
-        run: python3 platforms/royanews.py > platforms/links/royanews.m3u8
+      - name: Execute Python script for royas
+        run: python3 platforms/roya.py
 
       - name: commit & push
         run: |
